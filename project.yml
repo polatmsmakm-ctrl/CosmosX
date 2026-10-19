@@ -1,0 +1,28 @@
+
+name: CosmosX
+options:
+  bundleIdPrefix: com.cosmosx
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    PRODUCT_BUNDLE_IDENTIFIER: com.cosmosx.app
+    PRODUCT_NAME: CosmosX
+    INFOPLIST_KEY_CFBundleDisplayName: "COSMOS X"
+    GENERATE_INFOPLIST_FILE: YES
+targets:
+  CosmosX:
+    type: application
+    platform: iOS
+    sources:
+      - Sources
+    settings:
+      base:
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_IDENTITY: ""
+    scheme:
+      gatherCoverageData: false
