@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -40,3 +40,16 @@ jobs:
           name: COSMOS-X-unsigned-IPA
           path: COSMOS-X-unsigned.ipa
           retention-days: 7
+
+      - name: Publish IPA to ipa-build branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp COSMOS-X-unsigned.ipa "$RUNNER_TEMP/COSMOS-X-unsigned.ipa"
+          git checkout --orphan ipa-build
+          git rm -rf . > /dev/null
+          cp "$RUNNER_TEMP/COSMOS-X-unsigned.ipa" .
+          git add COSMOS-X-unsigned.ipa
+          git commit -m "Add built IPA"
+          git push --force origin ipa-build
