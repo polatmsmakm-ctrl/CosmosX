@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 @main
@@ -277,7 +276,7 @@ struct GalaxyArtwork: View {
                 ForEach(0..<5) { i in
                     Ellipse()
                         .stroke(
-                            i.isMultiple(of: 2) ? .cyan.opacity(0.35) : .purple.opacity(0.4),
+                            i.isMultiple(of: 2) ? Color.cyan.opacity(0.35) : Color.purple.opacity(0.4),
                             lineWidth: 1
                         )
                         .frame(
