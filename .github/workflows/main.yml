@@ -1,0 +1,42 @@
+
+name: Build COSMOS X IPA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build unsigned app
+        run: |
+          xcodebuild -project CosmosX.xcodeproj -scheme CosmosX -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build/DerivedData CODE_SIGNING_ALLOWED=NO build
+
+      - name: Package IPA
+        run: |
+          set -euo pipefail
+          APP_PATH="build/DerivedData/Build/Products/Release-iphoneos/CosmosX.app"
+          test -d "$APP_PATH"
+          mkdir -p build/ipa/Payload
+          cp -R "$APP_PATH" build/ipa/Payload/CosmosX.app
+          cd build/ipa
+          /usr/bin/zip -qry "$GITHUB_WORKSPACE/COSMOS-X-unsigned.ipa" Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: COSMOS-X-unsigned-IPA
+          path: COSMOS-X-unsigned.ipa
+          retention-days: 7
